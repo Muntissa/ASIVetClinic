@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\VetClinic.Common\VetClinic.Common.csproj" />
   </ItemGroup>
 

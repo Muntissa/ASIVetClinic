@@ -17,5 +17,6 @@ namespace VetClinic.Common.Entities
         public int SerialNumber { get; set; }
         public int Phone { get; set; }
         public String Email { get; set; }
+        
     }
 }
