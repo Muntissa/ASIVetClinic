@@ -8,15 +8,15 @@ namespace VetClinic.Common.Entities
 {
     public class Owner
     {
-        public String Surname { get; set; }
-        public String Name { get; set; }
-        public String Patronymic { get; set; }
-        public String OwnerFloor { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        public string OwnerFloor { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public String ViewDocument { get; set; }
+        public string ViewDocument { get; set; }
         public int SerialNumber { get; set; }
         public int Phone { get; set; }
-        public String Email { get; set; }
+        public string Email { get; set; }
         
     }
 }

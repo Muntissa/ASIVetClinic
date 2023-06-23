@@ -1,6 +1,8 @@
-﻿namespace VetClinic.Common
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace VetClinic.Common
 {
-    public class VetClinicContext
+    public class VetClinicContext : DbContext
     {
 
     }
