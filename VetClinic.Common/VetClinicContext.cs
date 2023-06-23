@@ -1,6 +1,9 @@
-﻿namespace VetClinic.Common
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using VetClinic.Common.Entities;
+
+namespace VetClinic.Common
 {
-    public class VetClinicContext
+    public class VetClinicContext : IdentityDbContext<Owner>
     {
 
     }
