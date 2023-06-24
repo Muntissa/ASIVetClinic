@@ -2,4 +2,6 @@
 /VetClinic.Common/obj/
 /VetClinic.Web/obj/
 /VetClinic.Web/bin/
+/VetClinic.ConsoleTests/obj/
+/VetClinic.ConsoleTests/bin/
 /.vs
