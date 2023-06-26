@@ -56,6 +56,15 @@ namespace VetClinic.Common
                 PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "root"),
                 SecurityStamp = string.Empty,
                 ConcurrencyStamp = string.Empty,
+
+                Surname = "",
+                Name = "Администратор",
+                Patronymic = "",
+                Sex = true,
+                DateOfBirth = new DateTime(2001, 1, 1),
+                EmploymentDate = new DateTime(2001, 1, 1),
+                Position = "Администратор",
+                Qualification = ""
             });
 
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
