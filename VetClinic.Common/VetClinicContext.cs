@@ -17,6 +17,10 @@ namespace VetClinic.Common
         public DbSet<RecordAnimal> RecordAnimal => Set<RecordAnimal>();
         public DbSet<Services> Services => Set<Services>();
 
+        public VetClinicContext(DbContextOptions options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

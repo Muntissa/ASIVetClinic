@@ -1,1 +1,6 @@
 ﻿
+void DoStuff()
+{
+}
+
+DoStuff();
