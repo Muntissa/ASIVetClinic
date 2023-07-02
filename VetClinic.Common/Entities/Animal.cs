@@ -29,6 +29,6 @@ namespace VetClinic.Common.Entities
         public int? OwnerId { get; set; }
         public Owner? Owner { get; set; }
 
-        public List<AnimalHospitalInfo> PatientInformations { get; set; } = new();
+        public List<AnimalHospitalInfo> AnimalHospitalInfos { get; set; } = new();
     }
 }
