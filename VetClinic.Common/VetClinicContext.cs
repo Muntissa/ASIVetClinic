@@ -8,14 +8,14 @@ namespace VetClinic.Common
     public class VetClinicContext : IdentityDbContext<MedicalStaff>
     {
         public DbSet<Diagnosis> Diagnosis => Set<Diagnosis>();
-        public DbSet<Drugs> Drugs => Set<Drugs>();
+        public DbSet<Drug> Drugs => Set<Drug>();
         public DbSet<Hospital> Hospital => Set<Hospital>();
         public DbSet<MedicalStaff> MedicalStaff => Set<MedicalStaff>();
         public DbSet<Owner> Owner => Set<Owner>();
-        public DbSet<PatientInformation> PatientInformation => Set<PatientInformation>();
+        public DbSet<AnimalHospitalInfo> PatientInformation => Set<AnimalHospitalInfo>();
         public DbSet<Reception> Reception => Set<Reception>();
-        public DbSet<RecordAnimal> RecordAnimal => Set<RecordAnimal>();
-        public DbSet<Services> Services => Set<Services>();
+        public DbSet<Animal> RecordAnimal => Set<Animal>();
+        public DbSet<Service> Services => Set<Service>();
 
         public VetClinicContext(DbContextOptions options) : base(options)
         {
@@ -25,15 +25,15 @@ namespace VetClinic.Common
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<PatientInformation>()
+            modelBuilder.Entity<AnimalHospitalInfo>()
                 .HasKey(bc => new { bc.RecordAnimalId, bc.HospitalId });
 
-            modelBuilder.Entity<PatientInformation>()
+            modelBuilder.Entity<AnimalHospitalInfo>()
                 .HasOne(bc => bc.RecordAnimal)
                 .WithMany(b => b.PatientInformation)
                 .HasForeignKey(bc => bc.RecordAnimalId);
 
-            modelBuilder.Entity<PatientInformation>()
+            modelBuilder.Entity<AnimalHospitalInfo>()
                 .HasOne(bc => bc.Hospital)
                 .WithMany(c => c.PatientInformation)
                 .HasForeignKey(bc => bc.HospitalId);

@@ -1,24 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace VetClinic.Common.Entities
 {
     public class Reception
     {
         public int Id { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-        public string OfferDate { get; set; }
-        public int Price { get; set; }
+
+        [MaxLength(50)]
+        public string Type { get; set; } = string.Empty;
+
+        [MaxLength(50)]
+        public string? Description { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime Date { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Precision(10, 2)]
+        public decimal Price { get; set; }
 
         public int MedicalStaffId { get; set; }
-        public virtual MedicalStaff MedicalStaff { get; set; }
+        public MedicalStaff? MedicalStaff { get; set; }
 
-        public virtual List<Diagnosis> DiagnosisList { get; set; } = new();
-        public virtual List<Services> ServicesList { get; set; } = new();
-        public virtual List<Drugs> DrugsList { get; set; } = new();
+        public List<Diagnosis> Diagnoses { get; set; } = new();
+        public List<Service> Services { get; set; } = new();
+        public List<Drug> Drugs { get; set; } = new();
     }
 }
