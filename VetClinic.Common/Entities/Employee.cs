@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VetClinic.Common.Entities
 {
-    public class MedicalStaff : IdentityUser
+    public class Employee : IdentityUser
     {
         [MaxLength(100)]
         public string Surname { get; set; } = string.Empty;

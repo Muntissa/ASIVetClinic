@@ -21,7 +21,7 @@ namespace VetClinic.Common.Entities
         public decimal Price { get; set; }
 
         public int MedicalStaffId { get; set; }
-        public MedicalStaff? MedicalStaff { get; set; }
+        public Employee? MedicalStaff { get; set; }
 
         public List<Diagnosis> Diagnoses { get; set; } = new();
         public List<Service> Services { get; set; } = new();

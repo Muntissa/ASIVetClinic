@@ -5,16 +5,16 @@ using VetClinic.Common.Entities;
 
 namespace VetClinic.Common
 {
-    public class VetClinicContext : IdentityDbContext<MedicalStaff>
+    public class VetClinicContext : IdentityDbContext<Employee>
     {
-        public DbSet<Diagnosis> Diagnosis => Set<Diagnosis>();
+        public DbSet<Animal> Animals => Set<Animal>();
+        public DbSet<AnimalHospitalInfo> AnimalHospitalInfos => Set<AnimalHospitalInfo>();
+        public DbSet<Diagnosis> Diagnoses => Set<Diagnosis>();
         public DbSet<Drug> Drugs => Set<Drug>();
-        public DbSet<Hospital> Hospital => Set<Hospital>();
-        public DbSet<MedicalStaff> MedicalStaff => Set<MedicalStaff>();
-        public DbSet<Owner> Owner => Set<Owner>();
-        public DbSet<AnimalHospitalInfo> PatientInformation => Set<AnimalHospitalInfo>();
-        public DbSet<Reception> Reception => Set<Reception>();
-        public DbSet<Animal> RecordAnimal => Set<Animal>();
+        public DbSet<Hospital> Hospitals => Set<Hospital>();
+        public DbSet<Employee> MedicalStaff => Set<Employee>();
+        public DbSet<Owner> Owners => Set<Owner>();
+        public DbSet<Reception> Receptions => Set<Reception>();
         public DbSet<Service> Services => Set<Service>();
 
         public VetClinicContext()
@@ -49,7 +49,7 @@ namespace VetClinic.Common
                 NormalizedName = "ADMIN"
             });
 
-            modelBuilder.Entity<MedicalStaff>().HasData(new MedicalStaff
+            modelBuilder.Entity<Employee>().HasData(new Employee
             {
                 Id = "aa6c0c49-3d13-433f-bc24-fcf769b6e6e7",
                 UserName = "Администратор",

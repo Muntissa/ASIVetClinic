@@ -13,7 +13,7 @@ builder.Services.AddDbContext<VetClinicContext>(options =>
 });
 
 builder.Services
-    .AddDefaultIdentity<MedicalStaff>(options =>
+    .AddDefaultIdentity<Employee>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequireDigit = false;
