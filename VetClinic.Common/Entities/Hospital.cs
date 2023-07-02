@@ -14,6 +14,6 @@ namespace VetClinic.Common.Entities
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public List<AnimalHospitalInfo> PatientInformations { get; set; } = new();
+        public List<AnimalHospitalInfo> AnimalHospitalInfos { get; set; } = new();
     }
 }
