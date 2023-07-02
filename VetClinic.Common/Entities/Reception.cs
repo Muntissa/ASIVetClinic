@@ -20,8 +20,8 @@ namespace VetClinic.Common.Entities
         [Precision(10, 2)]
         public decimal Price { get; set; }
 
-        public int MedicalStaffId { get; set; }
-        public Employee? MedicalStaff { get; set; }
+        public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
         public List<Diagnosis> Diagnoses { get; set; } = new();
         public List<Service> Services { get; set; } = new();

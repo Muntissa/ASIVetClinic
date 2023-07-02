@@ -11,8 +11,8 @@ namespace VetClinic.Common
         public DbSet<AnimalHospitalInfo> AnimalHospitalInfos => Set<AnimalHospitalInfo>();
         public DbSet<Diagnosis> Diagnoses => Set<Diagnosis>();
         public DbSet<Drug> Drugs => Set<Drug>();
+        public DbSet<Employee> Employees => Set<Employee>();
         public DbSet<Hospital> Hospitals => Set<Hospital>();
-        public DbSet<Employee> MedicalStaff => Set<Employee>();
         public DbSet<Owner> Owners => Set<Owner>();
         public DbSet<Reception> Receptions => Set<Reception>();
         public DbSet<Service> Services => Set<Service>();
