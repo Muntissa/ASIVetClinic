@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace VetClinic.Common.Entities
 {
@@ -10,11 +6,14 @@ namespace VetClinic.Common.Entities
     {
         public int Id { get; set; }
         public int InventoryNumber { get; set; }
-        public string Type { get; set; }
+
+        [MaxLength(50)]
+        public string Type { get; set; } = string.Empty;
+
         public int Lenght { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public virtual List<PatientInformation> PatientInformation { get; set; } = new();
+        public List<AnimalHospitalInfo> PatientInformations { get; set; } = new();
     }
 }
