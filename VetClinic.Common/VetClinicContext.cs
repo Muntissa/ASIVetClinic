@@ -17,6 +17,10 @@ namespace VetClinic.Common
         public DbSet<Animal> RecordAnimal => Set<Animal>();
         public DbSet<Service> Services => Set<Service>();
 
+        public VetClinicContext()
+        {
+        }
+
         public VetClinicContext(DbContextOptions options) : base(options)
         {
         }
@@ -25,7 +29,7 @@ namespace VetClinic.Common
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<AnimalHospitalInfo>()
+            /*modelBuilder.Entity<AnimalHospitalInfo>()
                 .HasKey(bc => new { bc.RecordAnimalId, bc.HospitalId });
 
             modelBuilder.Entity<AnimalHospitalInfo>()
@@ -36,7 +40,7 @@ namespace VetClinic.Common
             modelBuilder.Entity<AnimalHospitalInfo>()
                 .HasOne(bc => bc.Hospital)
                 .WithMany(c => c.PatientInformation)
-                .HasForeignKey(bc => bc.HospitalId);
+                .HasForeignKey(bc => bc.HospitalId);*/
 
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {
