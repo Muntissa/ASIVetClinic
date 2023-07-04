@@ -7,10 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<VetClinicContext>(options =>
-{
-    options.UseSqlServer(Environment.GetEnvironmentVariable("VET_CLINIC_CONNECTION_STRING"));
-});
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+builder.Services.AddDbContext<VetClinicContext>();
 
 builder.Services
     .AddDefaultIdentity<Employee>(options =>

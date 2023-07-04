@@ -17,30 +17,14 @@ namespace VetClinic.Common
         public DbSet<Reception> Receptions => Set<Reception>();
         public DbSet<Service> Services => Set<Service>();
 
-        public VetClinicContext()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-        }
-
-        public VetClinicContext(DbContextOptions options) : base(options)
-        {
+            optionsBuilder.UseNpgsql("Host=80.90.186.201;Port=5432;Database=AisVetClinicdb;Username=muntissa;Password=P@SSword1sr00t");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            /*modelBuilder.Entity<AnimalHospitalInfo>()
-                .HasKey(bc => new { bc.RecordAnimalId, bc.HospitalId });
-
-            modelBuilder.Entity<AnimalHospitalInfo>()
-                .HasOne(bc => bc.RecordAnimal)
-                .WithMany(b => b.PatientInformation)
-                .HasForeignKey(bc => bc.RecordAnimalId);
-
-            modelBuilder.Entity<AnimalHospitalInfo>()
-                .HasOne(bc => bc.Hospital)
-                .WithMany(c => c.PatientInformation)
-                .HasForeignKey(bc => bc.HospitalId);*/
 
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {

@@ -1,27 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using VetClinic.Common;
+using VetClinic.Common.Entities;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-var services = new ServiceCollection();
+using var context = new VetClinicContext();
 
-services.AddDbContext<VetClinicContext>(options => 
-{
-    options.UseSqlServer(Environment.GetEnvironmentVariable("VET_CLINIC_CONNECTION_STRING"));
-});
+if (context.Database.GetPendingMigrations().Any())
+    context.Database.Migrate();
 
-var serviceProvider = services.BuildServiceProvider();
-VetClinicContext context = serviceProvider.GetService<VetClinicContext>();
-
-context.Hospitals.Add(new() 
-{ 
-    InventoryNumber = 1,
-    Type = "test",
-    Lenght = 100,
-    Width = 100,
-    Height = 100
-});
+context.Set<Service>().Add(new() { Name = "amksdmaks", Price = 1000 });
 
 context.SaveChanges();
 
-Console.WriteLine(context.Hospitals.First().Type);
+Console.WriteLine(context.Services.First().Name);
+
+Console.ReadLine();
