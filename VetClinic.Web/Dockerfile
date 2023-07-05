@@ -11,8 +11,7 @@ WORKDIR "/src/VetClinic.Web"
 RUN dotnet build "VetClinic.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "VetClinic.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
+RUN dotnet publish "VetClinic.Web.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
