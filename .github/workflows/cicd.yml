@@ -31,4 +31,4 @@ jobs:
           context: .
           file: ./VetClinic.Web/Dockerfile
           push: true
-          tags: muntussa/vetclinicweb:latest
+          tags: muntissa/vetclinicweb:latest
