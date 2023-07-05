@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["VetClinic.Web/VetClinic.Web.csproj", "VetClinic.Web/"]
+COPY ["VetClinic.Common/VetClinic.Common.csproj", "VetClinic.Common/"]
 RUN dotnet restore "VetClinic.Web/VetClinic.Web.csproj"
 COPY . .
 WORKDIR "/src/VetClinic.Web"
