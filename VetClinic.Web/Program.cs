@@ -9,6 +9,10 @@ builder.Services.AddControllersWithViews();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+using (var context = new VetClinicContext())
+    if (context.Database.GetPendingMigrations().Any())
+        context.Database.Migrate();
+
 builder.Services.AddDbContext<VetClinicContext>();
 
 builder.Services
