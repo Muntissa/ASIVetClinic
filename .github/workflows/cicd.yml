@@ -39,5 +39,8 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USERNAME }}
           key: ${{ secrets.REMOTE_SSH_KEY }}
+          before-script: |
+            cd test
+            chmod 777 update.sh
           script: |
-            bash ./test/update.sh
+            ./update.sh
