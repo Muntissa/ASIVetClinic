@@ -32,3 +32,12 @@ jobs:
           file: ./VetClinic.Web/Dockerfile
           push: true
           tags: muntissa/vetclinicweb:latest
+      -
+        name: Execute remote SSH commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          script: |
+            bash ./test/update.sh
