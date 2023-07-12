@@ -1,0 +1,10 @@
+﻿@model ICollection<VetClinic.Common.Entities.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<a asp-action="RegisterNew" asp-route-role="Регистратор">Добавить регистратора</a>
+<a asp-action="RegisterNew" asp-route-role="Врач">Добавить врача</a>
