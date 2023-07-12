@@ -28,6 +28,27 @@ namespace VetClinic.Common
 
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {
+                Id = "11111111-b815-455a-8908-8133983c9200",
+                Name = "Главный врач",
+                NormalizedName = "ГЛАВНЫЙ ВРАЧ"
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "22222222-b815-455a-8908-8133983c9200",
+                Name = "Врач",
+                NormalizedName = "ВРАЧ"
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "33333333-b815-455a-8908-8133983c9200",
+                Name = "Регистратор",
+                NormalizedName = "РЕГИСТРАТОР"
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
                 Id = "6b7bf0ac-b815-455a-8908-8133983c9200",
                 Name = "admin",
                 NormalizedName = "ADMIN"

@@ -29,5 +29,7 @@ namespace VetClinic.Common.Entities
 
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
+
+        public List<Animal> Animals { get; set; } = new();
     }
 }

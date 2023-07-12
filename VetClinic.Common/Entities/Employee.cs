@@ -12,7 +12,7 @@ namespace VetClinic.Common.Entities
         public string Name { get; set; } = string.Empty;
 
         [MaxLength(100)]
-        public string Patronymic { get; set; } = string.Empty;
+        public string? Patronymic { get; set; } = string.Empty;
 
         public bool Sex { get; set; }
 
