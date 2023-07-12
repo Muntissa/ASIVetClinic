@@ -13,9 +13,11 @@ namespace VetClinic.Common.Entities
         public Hospital? Hospital { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Дата приема")]
         public DateTime StartDate { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Дата выписки")]
         public DateTime? EndDate { get; set; }
     }
 }
