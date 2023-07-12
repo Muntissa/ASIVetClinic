@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VetClinic.Common;
 using VetClinic.Common.Entities;
 using VetClinic.Web.Services;
 
@@ -9,6 +10,13 @@ namespace VetClinic.Web.Controllers
 {
     public class EmployeesController : Controller
     {
+        public enum IndexShowType
+        {
+            SinglePerson,
+            List
+        }
+
+        private readonly VetClinicContext _context;
         private readonly UserManager<Employee> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<Employee> _userStore;
@@ -16,11 +24,13 @@ namespace VetClinic.Web.Controllers
         private readonly IEmailSender _emailSender;
 
         public EmployeesController(
+            VetClinicContext context,
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
             IUserStore<Employee> userStore,
             IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _userStore = userStore;
@@ -28,9 +38,43 @@ namespace VetClinic.Web.Controllers
             _emailSender = emailSender;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? role = null)
         {
-            return View(await _userManager.Users.ToListAsync());
+            if (role != null)
+                return View(await _userManager.GetUsersInRoleAsync(role));
+
+            var admins = await _userManager.GetUsersInRoleAsync("admin");
+
+            return View(await _userManager
+                .Users
+                .Where(u => !admins.Contains(u))
+                .ToListAsync());
+        }
+
+        public async Task<IActionResult> HeadDoctorDetails()
+        {
+            var heads = await _userManager.GetUsersInRoleAsync("Главный врач");
+
+            if (heads.Count == 0)
+                return NotFound();
+
+            if (heads.Count == 1)
+                return RedirectToAction(nameof(Details), new { id = heads[0].Id });
+
+            return RedirectToAction(nameof(Index), new { role = "Главный врач" });
+        }
+
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null || _userManager.Users == null)
+                return NotFound();
+
+            Employee? employee = await _userManager.FindByIdAsync(id);
+
+            if (employee == null)
+                return NotFound();
+
+            return View(employee);
         }
 
         public IActionResult RegisterNew(string role)
@@ -40,6 +84,7 @@ namespace VetClinic.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterNew(Employee employee, string role)
         {
             if (!ModelState.IsValid)
@@ -81,6 +126,75 @@ namespace VetClinic.Web.Controllers
                 ViewBag.Role = role;
                 return View();
             }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(string? id)
+        {
+            if (id == null || _userManager.Users == null)
+                return NotFound();
+
+            Employee? employee = await _userManager.FindByIdAsync(id);
+
+            if (employee == null)
+                return NotFound();
+
+            return View(employee);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, /*[Bind("Id,Name,Price")]*/ Employee employee)
+        {
+            if (id != employee.Id)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            Employee? employeeToUpdate = await _userManager.FindByIdAsync(employee.Id);
+
+            if (employeeToUpdate == null)
+                return NotFound();
+
+            employeeToUpdate.Surname = employee.Surname;
+            employeeToUpdate.Name = employee.Name;
+            employeeToUpdate.Patronymic = employee.Patronymic;
+            employeeToUpdate.Sex = employee.Sex;
+            employeeToUpdate.DateOfBirth = employee.DateOfBirth;
+            employeeToUpdate.EmploymentDate = employee.EmploymentDate;
+            employeeToUpdate.Position = employee.Position;
+            employeeToUpdate.Qualification = employee.Qualification;
+            employeeToUpdate.Email = employee.Email;
+            employeeToUpdate.PhoneNumber = employee.PhoneNumber;
+
+            await _userManager.UpdateAsync(employeeToUpdate);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (id == null || _userManager.Users == null)
+                return NotFound();
+
+            Employee? employee = await _userManager.FindByIdAsync(id);
+
+            if (employee == null)
+                return NotFound();
+
+            return View(employee);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            Employee? employee = await _userManager.FindByIdAsync(id);
+
+            if (employee != null)
+                await _userManager.DeleteAsync(employee);
 
             return RedirectToAction(nameof(Index));
         }

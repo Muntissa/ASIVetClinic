@@ -67,7 +67,6 @@ namespace VetClinic.Web.Controllers
             return View(drug);
         }
 
-        // GET: Drugs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Drugs == null)
@@ -83,9 +82,6 @@ namespace VetClinic.Web.Controllers
             return View(drug);
         }
 
-        // POST: Drugs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Drug drug)
@@ -118,7 +114,6 @@ namespace VetClinic.Web.Controllers
             return View(drug);
         }
 
-        // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Drugs == null)
@@ -136,7 +131,6 @@ namespace VetClinic.Web.Controllers
             return View(drug);
         }
 
-        // POST: Drugs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

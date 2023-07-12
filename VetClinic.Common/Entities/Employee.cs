@@ -35,5 +35,11 @@ namespace VetClinic.Common.Entities
         [MaxLength(100)]
         [Display(Name = "Квалификация")]
         public string Qualification { get; set; } = string.Empty;
+
+        [Display(Name = "Адрес электронной почты")]
+        public override string? Email { get => base.Email; set => base.Email = value; }
+
+        [Display(Name = "Номер телефона")]
+        public override string? PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
     }
 }
