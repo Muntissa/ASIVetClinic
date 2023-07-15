@@ -4,14 +4,35 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace VetClinic.Common.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Animals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Sex = table.Column<bool>(type: "boolean", nullable: false),
+                    Breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Color = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Weight = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    PhotoPath = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Animals", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -33,21 +54,21 @@ namespace VetClinic.Common.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Sex = table.Column<bool>(type: "boolean", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EmploymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EmploymentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Position = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Qualification = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -114,7 +135,7 @@ namespace VetClinic.Common.Migrations
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Sex = table.Column<bool>(type: "boolean", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DocumentData = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: true)
@@ -245,6 +266,58 @@ namespace VetClinic.Common.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AnimalHospitalInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnimalId = table.Column<int>(type: "integer", nullable: false),
+                    HospitalId = table.Column<int>(type: "integer", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalHospitalInfos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AnimalHospitalInfos_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnimalHospitalInfos_Hospitals_HospitalId",
+                        column: x => x.HospitalId,
+                        principalTable: "Hospitals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnimalOwner",
+                columns: table => new
+                {
+                    AnimalsId = table.Column<int>(type: "integer", nullable: false),
+                    OwnersId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalOwner", x => new { x.AnimalsId, x.OwnersId });
+                    table.ForeignKey(
+                        name: "FK_AnimalOwner_Animals_AnimalsId",
+                        column: x => x.AnimalsId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnimalOwner_Owners_OwnersId",
+                        column: x => x.OwnersId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Receptions",
                 columns: table => new
                 {
@@ -252,44 +325,33 @@ namespace VetClinic.Common.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
-                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
-                    EmployeeId1 = table.Column<string>(type: "text", nullable: true)
+                    OwnerId = table.Column<int>(type: "integer", nullable: false),
+                    AnimalId = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Receptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Receptions_AspNetUsers_EmployeeId1",
-                        column: x => x.EmployeeId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Animals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Sex = table.Column<bool>(type: "boolean", nullable: false),
-                    Breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Color = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Weight = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PhotoPath = table.Column<string>(type: "text", nullable: true),
-                    OwnerId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Animals", x => x.Id);
+                        name: "FK_Receptions_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Animals_Owners_OwnerId",
+                        name: "FK_Receptions_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Receptions_Owners_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Owners",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -364,43 +426,21 @@ namespace VetClinic.Common.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AnimalHospitalInfos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnimalId = table.Column<int>(type: "integer", nullable: false),
-                    HospitalId = table.Column<int>(type: "integer", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnimalHospitalInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AnimalHospitalInfos_Animals_AnimalId",
-                        column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnimalHospitalInfos_Hospitals_HospitalId",
-                        column: x => x.HospitalId,
-                        principalTable: "Hospitals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6b7bf0ac-b815-455a-8908-8133983c9200", null, "admin", "ADMIN" });
+                values: new object[,]
+                {
+                    { "11111111-b815-455a-8908-8133983c9200", null, "Главный врач", "ГЛАВНЫЙ ВРАЧ" },
+                    { "22222222-b815-455a-8908-8133983c9200", null, "Врач", "ВРАЧ" },
+                    { "33333333-b815-455a-8908-8133983c9200", null, "Регистратор", "РЕГИСТРАТОР" },
+                    { "6b7bf0ac-b815-455a-8908-8133983c9200", null, "admin", "ADMIN" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "EmploymentDate", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "Position", "Qualification", "SecurityStamp", "Sex", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "aa6c0c49-3d13-433f-bc24-fcf769b6e6e7", 0, "", new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@email.com", true, new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Администратор", "ADMIN@EMAIL.COM", "АДМИНИСТРАТОР", "AQAAAAIAAYagAAAAEF3HmD2NPBkqRrubDHgY316XpjQQuD2RuaDUFmANkaS+9UWtgxOjjw4DmUjCUmXZ8w==", "", null, false, "Администратор", "", "", true, "", false, "Администратор" });
+                values: new object[] { "aa6c0c49-3d13-433f-bc24-fcf769b6e6e7", 0, "", new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@email.com", true, new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, "Администратор", "ADMIN@EMAIL.COM", "АДМИНИСТРАТОР", "AQAAAAIAAYagAAAAEIL8bsP9ki0uRZAbJikuyArgIR166lRAr1Z8HgvxBsgQizpNUTaaFR5obJLs0YdEDg==", "", null, false, "Администратор", "", "", true, "", false, "Администратор" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -418,9 +458,9 @@ namespace VetClinic.Common.Migrations
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Animals_OwnerId",
-                table: "Animals",
-                column: "OwnerId");
+                name: "IX_AnimalOwner_OwnersId",
+                table: "AnimalOwner",
+                column: "OwnersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -470,9 +510,19 @@ namespace VetClinic.Common.Migrations
                 column: "ReceptionsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Receptions_EmployeeId1",
+                name: "IX_Receptions_AnimalId",
                 table: "Receptions",
-                column: "EmployeeId1");
+                column: "AnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Receptions_EmployeeId",
+                table: "Receptions",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Receptions_OwnerId",
+                table: "Receptions",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReceptionService_ServicesId",
@@ -485,6 +535,9 @@ namespace VetClinic.Common.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AnimalHospitalInfos");
+
+            migrationBuilder.DropTable(
+                name: "AnimalOwner");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -511,9 +564,6 @@ namespace VetClinic.Common.Migrations
                 name: "ReceptionService");
 
             migrationBuilder.DropTable(
-                name: "Animals");
-
-            migrationBuilder.DropTable(
                 name: "Hospitals");
 
             migrationBuilder.DropTable(
@@ -532,10 +582,13 @@ namespace VetClinic.Common.Migrations
                 name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Owners");
+                name: "Animals");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Owners");
         }
     }
 }

@@ -22,6 +22,21 @@ namespace VetClinic.Common.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AnimalOwner", b =>
+                {
+                    b.Property<int>("AnimalsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AnimalsId", "OwnersId");
+
+                    b.HasIndex("OwnersId");
+
+                    b.ToTable("AnimalOwner");
+                });
+
             modelBuilder.Entity("DiagnosisReception", b =>
                 {
                     b.Property<int>("DiagnosesId")
@@ -34,7 +49,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasIndex("ReceptionsId");
 
-                    b.ToTable("DiagnosisReception", (string)null);
+                    b.ToTable("DiagnosisReception");
                 });
 
             modelBuilder.Entity("DrugReception", b =>
@@ -49,7 +64,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasIndex("ReceptionsId");
 
-                    b.ToTable("DrugReception", (string)null);
+                    b.ToTable("DrugReception");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -78,6 +93,24 @@ namespace VetClinic.Common.Migrations
                     b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
+                        new
+                        {
+                            Id = "11111111-b815-455a-8908-8133983c9200",
+                            Name = "Главный врач",
+                            NormalizedName = "ГЛАВНЫЙ ВРАЧ"
+                        },
+                        new
+                        {
+                            Id = "22222222-b815-455a-8908-8133983c9200",
+                            Name = "Врач",
+                            NormalizedName = "ВРАЧ"
+                        },
+                        new
+                        {
+                            Id = "33333333-b815-455a-8908-8133983c9200",
+                            Name = "Регистратор",
+                            NormalizedName = "РЕГИСТРАТОР"
+                        },
                         new
                         {
                             Id = "6b7bf0ac-b815-455a-8908-8133983c9200",
@@ -211,7 +244,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasIndex("ServicesId");
 
-                    b.ToTable("ReceptionService", (string)null);
+                    b.ToTable("ReceptionService");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Animal", b =>
@@ -233,15 +266,12 @@ namespace VetClinic.Common.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
-
-                    b.Property<int?>("OwnerId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("PhotoPath")
                         .HasColumnType("text");
@@ -255,9 +285,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Animals", (string)null);
+                    b.ToTable("Animals");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.AnimalHospitalInfo", b =>
@@ -272,13 +300,13 @@ namespace VetClinic.Common.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("HospitalId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -286,7 +314,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasIndex("HospitalId");
 
-                    b.ToTable("AnimalHospitalInfos", (string)null);
+                    b.ToTable("AnimalHospitalInfos");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Diagnosis", b =>
@@ -304,7 +332,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Diagnoses", (string)null);
+                    b.ToTable("Diagnoses");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Drug", b =>
@@ -325,7 +353,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drugs", (string)null);
+                    b.ToTable("Drugs");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Employee", b =>
@@ -341,7 +369,7 @@ namespace VetClinic.Common.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -351,7 +379,7 @@ namespace VetClinic.Common.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("EmploymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -376,7 +404,6 @@ namespace VetClinic.Common.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Patronymic")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -439,7 +466,7 @@ namespace VetClinic.Common.Migrations
                             Name = "Администратор",
                             NormalizedEmail = "ADMIN@EMAIL.COM",
                             NormalizedUserName = "АДМИНИСТРАТОР",
-                            PasswordHash = "AQAAAAIAAYagAAAAEF3HmD2NPBkqRrubDHgY316XpjQQuD2RuaDUFmANkaS+9UWtgxOjjw4DmUjCUmXZ8w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIL8bsP9ki0uRZAbJikuyArgIR166lRAr1Z8HgvxBsgQizpNUTaaFR5obJLs0YdEDg==",
                             Patronymic = "",
                             PhoneNumberConfirmed = false,
                             Position = "Администратор",
@@ -479,7 +506,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hospitals", (string)null);
+                    b.ToTable("Hospitals");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Owner", b =>
@@ -491,7 +518,7 @@ namespace VetClinic.Common.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DocumentData")
                         .IsRequired()
@@ -528,7 +555,7 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Owners", (string)null);
+                    b.ToTable("Owners");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Reception", b =>
@@ -539,18 +566,22 @@ namespace VetClinic.Common.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("EmployeeId1")
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
@@ -563,9 +594,13 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId1");
+                    b.HasIndex("AnimalId");
 
-                    b.ToTable("Receptions", (string)null);
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Receptions");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Service", b =>
@@ -587,7 +622,22 @@ namespace VetClinic.Common.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("AnimalOwner", b =>
+                {
+                    b.HasOne("VetClinic.Common.Entities.Animal", null)
+                        .WithMany()
+                        .HasForeignKey("AnimalsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Common.Entities.Owner", null)
+                        .WithMany()
+                        .HasForeignKey("OwnersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DiagnosisReception", b =>
@@ -686,15 +736,6 @@ namespace VetClinic.Common.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VetClinic.Common.Entities.Animal", b =>
-                {
-                    b.HasOne("VetClinic.Common.Entities.Owner", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("VetClinic.Common.Entities.AnimalHospitalInfo", b =>
                 {
                     b.HasOne("VetClinic.Common.Entities.Animal", "Animal")
@@ -716,11 +757,29 @@ namespace VetClinic.Common.Migrations
 
             modelBuilder.Entity("VetClinic.Common.Entities.Reception", b =>
                 {
+                    b.HasOne("VetClinic.Common.Entities.Animal", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("VetClinic.Common.Entities.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId1");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Common.Entities.Owner", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Animal");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("VetClinic.Common.Entities.Animal", b =>
