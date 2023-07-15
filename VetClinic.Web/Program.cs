@@ -29,7 +29,7 @@ builder.Services
         options.SignIn.RequireConfirmedAccount = false;
         options.User.AllowedUserNameCharacters = 
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+" +
-            "àáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß";
+            "Ð°Ð±Ð²Ð³Ð´ÐµÑ‘Ð¶Ð·Ð¸Ð¹ÐºÐ»Ð¼Ð½Ð¾Ð¿Ñ€ÑÑ‚ÑƒÑ„Ñ…Ñ†Ñ‡ÑˆÑ‰ÑŠÑ‹ÑŒÑÑŽÑÐÐ‘Ð’Ð“Ð”Ð•ÐÐ–Ð—Ð˜Ð™ÐšÐ›ÐœÐÐžÐŸÐ Ð¡Ð¢Ð£Ð¤Ð¥Ð¦Ð§Ð¨Ð©ÐªÐ«Ð¬Ð­Ð®Ð¯";
         options.Password.RequireDigit = false;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
@@ -79,9 +79,9 @@ app.Run();
 
 /*public class AuthOptions
 {
-    public const string ISSUER = "MyAuthServer"; // èçäàòåëü òîêåíà
-    public const string AUDIENCE = "MyAuthClient"; // ïîòðåáèòåëü òîêåíà
-    const string KEY = "mysupersecret_secretkey!123";   // êëþ÷ äëÿ øèôðàöèè
+    public const string ISSUER = "MyAuthServer"; // Ã¨Ã§Ã¤Ã Ã²Ã¥Ã«Ã¼ Ã²Ã®ÃªÃ¥Ã­Ã 
+    public const string AUDIENCE = "MyAuthClient"; // Ã¯Ã®Ã²Ã°Ã¥Ã¡Ã¨Ã²Ã¥Ã«Ã¼ Ã²Ã®ÃªÃ¥Ã­Ã 
+    const string KEY = "mysupersecret_secretkey!123";   // ÃªÃ«Ã¾Ã· Ã¤Ã«Ã¿ Ã¸Ã¨Ã´Ã°Ã Ã¶Ã¨Ã¨
     public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
 }*/
