@@ -32,9 +32,10 @@ namespace VetClinic.Common.Entities
 
         public string? PhotoPath { get; set; }
 
-        public int? OwnerId { get; set; }
-        public Owner? Owner { get; set; }
+        /*public int? OwnerId { get; set; }
+        public Owner? Owner { get; set; }*/
 
+        public List<Owner> Owners { get; set; } = new();
         public List<AnimalHospitalInfo> AnimalHospitalInfos { get; set; } = new();
     }
 }

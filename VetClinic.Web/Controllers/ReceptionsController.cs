@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VetClinic.Common;
 using VetClinic.Common.Entities;
@@ -13,21 +9,21 @@ namespace VetClinic.Web.Controllers
     public class ReceptionsController : Controller
     {
         private readonly VetClinicContext _context;
+        private readonly UserManager<Employee> _userManager;
 
-        public ReceptionsController(VetClinicContext context)
+        public ReceptionsController(VetClinicContext context, UserManager<Employee> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Receptions
         public async Task<IActionResult> Index()
         {
-              return _context.Receptions != null ? 
-                          View(await _context.Receptions.ToListAsync()) :
-                          Problem("Entity set 'VetClinicContext.Receptions'  is null.");
+            return _context.Receptions != null ? 
+                View(await _context.Receptions.ToListAsync()) :
+                Problem("Entity set 'VetClinicContext.Receptions'  is null.");
         }
 
-        // GET: Receptions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Receptions == null)
@@ -45,18 +41,91 @@ namespace VetClinic.Web.Controllers
             return View(reception);
         }
 
-        // GET: Receptions/Create
-        public IActionResult Create()
+        #region Appointment
+        public async Task<IActionResult> ChooseOwner()
+        {
+            return View(await _context.Owners.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChooseOwner(int id)
+        {
+            TempData["OwnerId"] = id;
+            return RedirectToAction(nameof(ChooseAnimal));
+        }
+
+        public async Task<IActionResult> ChooseAnimal()
+        {
+            return View(await _context.Animals.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChooseAnimal(int id)
+        {
+            TempData["AnimalId"] = id;
+            return RedirectToAction(nameof(DescribeProblem));
+        }
+
+        public async Task<IActionResult> DescribeProblem()
         {
             return View();
         }
 
-        // POST: Receptions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Type,Description,Date,Price,EmployeeId")] Reception reception)
+        public IActionResult DescribeProblem([Bind("Type, Description")] Reception reception)
+        {
+            TempData["Type"] = reception.Type;
+            TempData["Description"] = reception.Description;
+            return RedirectToAction(nameof(ChooseDoctor));
+        }
+
+        public async Task<IActionResult> ChooseDoctor()
+        {
+            return View(await _context.Owners.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChooseDoctor(int id)
+        {
+            TempData["EmployeeId"] = id;
+            return RedirectToAction(nameof(ChooseDateTime));
+        }
+
+        public IActionResult ChooseDateTime()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChooseDateTime([Bind("Date")] Reception reception)
+        {
+            TempData["DateTime"] = reception.Date;
+            return RedirectToAction(nameof(Create));
+        }
+
+        public IActionResult Create()
+        {
+            Reception reception = new Reception
+            {
+                Type = TempData["Type"].ToString(),
+                Description = TempData["Description"].ToString(),
+                OwnerId = (int)TempData["OwnerId"],
+                AnimalId = (int)TempData["AnimalId"],
+                EmployeeId = (int)TempData["EmployeeId"],
+                Date = (DateTime)TempData["DateTime"],
+            };
+
+            return View(reception);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Reception reception)
         {
             if (ModelState.IsValid)
             {
@@ -64,10 +133,11 @@ namespace VetClinic.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(reception);
         }
+        #endregion
 
-        // GET: Receptions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Receptions == null)
@@ -83,9 +153,6 @@ namespace VetClinic.Web.Controllers
             return View(reception);
         }
 
-        // POST: Receptions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Description,Date,Price,EmployeeId")] Reception reception)
@@ -118,7 +185,6 @@ namespace VetClinic.Web.Controllers
             return View(reception);
         }
 
-        // GET: Receptions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Receptions == null)
@@ -136,7 +202,6 @@ namespace VetClinic.Web.Controllers
             return View(reception);
         }
 
-        // POST: Receptions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
