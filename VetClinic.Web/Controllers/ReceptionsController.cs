@@ -68,7 +68,7 @@ namespace VetClinic.Web.Controllers
             return RedirectToAction(nameof(DescribeProblem));
         }
 
-        public async Task<IActionResult> DescribeProblem()
+        public IActionResult DescribeProblem()
         {
             return View();
         }
@@ -89,7 +89,7 @@ namespace VetClinic.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ChooseDoctor(int id)
+        public IActionResult ChooseDoctor(string id)
         {
             TempData["EmployeeId"] = id;
             return RedirectToAction(nameof(ChooseDateTime));
@@ -116,7 +116,7 @@ namespace VetClinic.Web.Controllers
                 Description = TempData["Description"].ToString(),
                 OwnerId = (int)TempData["OwnerId"],
                 AnimalId = (int)TempData["AnimalId"],
-                EmployeeId = (int)TempData["EmployeeId"],
+                EmployeeId = TempData["EmployeeId"].ToString(),
                 Date = (DateTime)TempData["DateTime"],
             };
 
