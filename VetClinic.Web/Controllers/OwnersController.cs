@@ -19,15 +19,19 @@ namespace VetClinic.Web.Controllers
             _context = context;
         }
 
-        // GET: Owners
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? animalId)
         {
-              return _context.Owners != null ? 
-                          View(await _context.Owners.ToListAsync()) :
-                          Problem("Entity set 'VetClinicContext.Owners'  is null.");
+            if (animalId == null)
+                return View(await _context.Owners.ToListAsync());
+
+            Animal? animal = await _context.Animals.FindAsync(animalId);
+
+            if (animal == null)
+                return NotFound();
+
+            return View(animal.Owners);
         }
 
-        // GET: Owners/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Owners == null)
@@ -45,15 +49,11 @@ namespace VetClinic.Web.Controllers
             return View(owner);
         }
 
-        // GET: Owners/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Owners/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SerialNumber,Surname,Name,Patronymic,Sex,DateOfBirth,DocumentData,Phone,Email")] Owner owner)
@@ -67,7 +67,6 @@ namespace VetClinic.Web.Controllers
             return View(owner);
         }
 
-        // GET: Owners/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Owners == null)
@@ -83,9 +82,6 @@ namespace VetClinic.Web.Controllers
             return View(owner);
         }
 
-        // POST: Owners/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,Surname,Name,Patronymic,Sex,DateOfBirth,DocumentData,Phone,Email")] Owner owner)
@@ -118,7 +114,6 @@ namespace VetClinic.Web.Controllers
             return View(owner);
         }
 
-        // GET: Owners/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Owners == null)
@@ -136,7 +131,6 @@ namespace VetClinic.Web.Controllers
             return View(owner);
         }
 
-        // POST: Owners/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

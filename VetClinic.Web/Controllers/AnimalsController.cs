@@ -19,45 +19,42 @@ namespace VetClinic.Web.Controllers
             _context = context;
         }
 
-        // GET: Animals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? ownerId)
         {
-            var vetClinicContext = _context.Animals.Include(a => a.Owner);
-            return View(await vetClinicContext.ToListAsync());
+            if (ownerId == null)
+                return View(await _context.Animals.ToListAsync());
+
+            Owner? owner = await _context.Owners.FindAsync(ownerId);
+
+            if (owner == null)
+                return NotFound();
+
+            return View(owner.Animals);
         }
 
-        // GET: Animals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Animals == null)
-            {
                 return NotFound();
-            }
 
             var animal = await _context.Animals
-                .Include(a => a.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (animal == null)
-            {
                 return NotFound();
-            }
 
             return View(animal);
         }
 
-        // GET: Animals/Create
         public IActionResult Create()
         {
             ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "DocumentData");
             return View();
         }
 
-        // POST: Animals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath,OwnerId")] Animal animal)
+        public async Task<IActionResult> Create([Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath")] Animal animal)
         {
             if (ModelState.IsValid)
             {
@@ -65,38 +62,29 @@ namespace VetClinic.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "DocumentData", animal.OwnerId);
+
             return View(animal);
         }
 
-        // GET: Animals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Animals == null)
-            {
                 return NotFound();
-            }
 
             var animal = await _context.Animals.FindAsync(id);
+
             if (animal == null)
-            {
                 return NotFound();
-            }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "DocumentData", animal.OwnerId);
+
             return View(animal);
         }
 
-        // POST: Animals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath,OwnerId")] Animal animal)
         {
             if (id != animal.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -108,40 +96,32 @@ namespace VetClinic.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!AnimalExists(animal.Id))
-                    {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "DocumentData", animal.OwnerId);
+
             return View(animal);
         }
 
-        // GET: Animals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Animals == null)
-            {
                 return NotFound();
-            }
 
             var animal = await _context.Animals
-                .Include(a => a.Owner)
+                //.Include(a => a.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (animal == null)
-            {
                 return NotFound();
-            }
 
             return View(animal);
         }
 
-        // POST: Animals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
