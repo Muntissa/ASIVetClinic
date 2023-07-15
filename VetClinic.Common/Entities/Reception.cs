@@ -21,7 +21,7 @@ namespace VetClinic.Common.Entities
         public int AnimalId { get; set; }
         public Animal? Animal { get; set; }
 
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
         [DataType(DataType.DateTime)]
