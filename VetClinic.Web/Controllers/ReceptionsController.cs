@@ -84,7 +84,7 @@ namespace VetClinic.Web.Controllers
 
         public async Task<IActionResult> ChooseDoctor()
         {
-            return View(await _context.Owners.ToListAsync());
+            return View(await _userManager.GetUsersInRoleAsync("Врач"));
         }
 
         [HttpPost]
@@ -108,7 +108,7 @@ namespace VetClinic.Web.Controllers
             return RedirectToAction(nameof(Create));
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             Reception reception = new Reception
             {
@@ -119,6 +119,10 @@ namespace VetClinic.Web.Controllers
                 EmployeeId = TempData["EmployeeId"].ToString(),
                 Date = (DateTime)TempData["DateTime"],
             };
+
+            reception.Owner = await _context.Owners.FindAsync(reception.OwnerId);
+            reception.Animal = await _context.Animals.FindAsync(reception.AnimalId);
+            reception.Employee = await _userManager.FindByIdAsync(reception.EmployeeId);
 
             return View(reception);
         }

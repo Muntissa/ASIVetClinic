@@ -4,48 +4,63 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div>
+    <h4>Reception</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OwnerId)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Owner.Surname @Model.Owner.Name @Model.Owner.Patronymic
+        </dd>
 
-<h4>Reception</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AnimalId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Animal.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeId)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Employee.Surname @Model.Employee.Name @Model.Employee.Patronymic
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OwnerId"/>
+            <input type="hidden" asp-for="AnimalId"/>
+            <input type="hidden" asp-for="EmployeeId"/>
+            <input type="hidden" asp-for="Type"/>
+            <input type="hidden" asp-for="Description"/>
+            <input type="hidden" asp-for="Date"/>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Подтвердить" class="btn btn-primary" />
             </div>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    </dl>
 </div>
 
 @section Scripts {

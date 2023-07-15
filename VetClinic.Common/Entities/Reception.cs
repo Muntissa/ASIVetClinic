@@ -15,17 +15,20 @@ namespace VetClinic.Common.Entities
         [Display(Name = "Описание")]
         public string? Description { get; set; }
 
+        [Display(Name = "Владелец")]
         public int OwnerId { get; set; }
         public Owner? Owner { get; set; }
 
+        [Display(Name = "Животное")]
         public int AnimalId { get; set; }
         public Animal? Animal { get; set; }
 
+        [Display(Name = "Врач")]
         public string EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
         [DataType(DataType.DateTime)]
-        [Display(Name = "Дата")]
+        [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
 
         public List<Diagnosis> Diagnoses { get; set; } = new();
