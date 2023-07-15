@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VetClinic.Common;
@@ -19,9 +20,19 @@ namespace VetClinic.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return _context.Receptions != null ? 
-                View(await _context.Receptions.ToListAsync()) :
-                Problem("Entity set 'VetClinicContext.Receptions'  is null.");
+            Employee? user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user != null)
+            {
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Врач"))
+                    return View(await _context.Receptions
+                        .Where(r => r.EmployeeId == user.Id)
+                        .ToListAsync());
+            }
+            
+            return View(await _context.Receptions.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
