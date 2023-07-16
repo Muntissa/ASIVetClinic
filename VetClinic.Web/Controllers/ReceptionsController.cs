@@ -25,14 +25,13 @@ namespace VetClinic.Web.Controllers
             if (user != null)
             {
                 IList<string> roles = await _userManager.GetRolesAsync(user);
-
                 if (roles.Contains("Врач"))
                     return View(await _context.Receptions
                         .Where(r => r.EmployeeId == user.Id)
                         .ToListAsync());
             }
             
-            return View(await _context.Receptions.ToListAsync());
+            return View(await _context.Receptions.Include(r => r.Employee).ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)

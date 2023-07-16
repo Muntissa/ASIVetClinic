@@ -4,12 +4,75 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<a class="text-warning" asp-action="RegisterNew" asp-route-role="Регистратор">Добавить регистратора</a> | 
-<a class="text-warning" asp-action="RegisterNew" asp-route-role="Врач">Добавить врача</a>
 
 @if (User.IsInRole("admin"))
+{
+    <text> | </text>
+    <a class="text-danger" asp-action="RegisterNew" asp-route-role="Главный врач">Добавить глав. врача</a>
+}
+
+<div class="container-fluid mt-5">
+    <h1 class="text-center mb-4">Клиенты</h1>
+    <div class="row">
+        <div class="col-md-12 col-lg-6 mb-4 mb-lg-0">
+            @if (ViewBag.Role != null)
+            {
+                if (ViewBag.Role == "Регистратор")
+                {
+                    <a class="btn btn-success" asp-action="RegisterNew" asp-route-role="Регистратор">Добавить регистратора</a>
+                }
+                else if (ViewBag.Role == "Врач")
+                {
+                    <a class="btn btn-success" asp-action="RegisterNew" asp-route-role="Врач">Добавить врача</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-success" asp-action="RegisterNew" asp-route-role="Регистратор">Добавить регистратора</a>
+                <a class="btn btn-success" asp-action="RegisterNew" asp-route-role="Врач">Добавить врача</a>
+            }
+        </div>
+    </div>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Дата начала работы</th>
+                    <th scope="col">Квалификация</th>
+                    <th scope="col">Роль</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Surname</td>
+                        <td>@item.Name</td>
+                        <td>@item.Patronymic</td>
+                        <td>@item.EmploymentDate</td>
+                        <td>@item.Qualification</td>
+                        <td>@item.Role</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-2">Изменить</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm me-2">Детальная информация</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*
+<a class="text-warning" asp-action="RegisterNew" asp-route-role="Регистратор">Добавить регистратора</a> | 
+<a class="text-warning" asp-action="RegisterNew" asp-route-role="Врач">Добавить врача</a>*@
+
+@*@if (User.IsInRole("admin"))
 {
     <text> | </text>
     <a class="text-danger" asp-action="RegisterNew" asp-route-role="Главный врач">Добавить глав. врача</a>
@@ -57,4 +120,4 @@
             </tr>
         }
     </tbody>
-</table>
+</table>*@

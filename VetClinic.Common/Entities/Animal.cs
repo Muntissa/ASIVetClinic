@@ -10,7 +10,7 @@ namespace VetClinic.Common.Entities
         [MaxLength(20)]
         [Display(Name = "Кличка")]
         public string Name { get; set; } = string.Empty;
-
+        
         [Display(Name = "Пол")]
         public bool Sex { get; set; }
 

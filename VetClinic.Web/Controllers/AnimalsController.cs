@@ -75,6 +75,8 @@ namespace VetClinic.Web.Controllers
                     animal.PhotoPath = "/files/" + fileName;
                 }
 
+                animal.Status = "Ожидание";
+
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

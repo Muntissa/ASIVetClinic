@@ -5,7 +5,68 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>View</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Детальная информация</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Surname)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Surname)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Name)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Name)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Patronymic)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Patronymic)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Sex)</div>
+                        <div class="col-sm-8">@(Model.Sex ? "Мужчина" : "Женщина")</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DateOfBirth)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.DateOfBirth)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.EmploymentDate)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.EmploymentDate)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Position)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Position)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Qualification)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Qualification)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Email)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Email)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.PhoneNumber)</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.PhoneNumber)</div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-sm-12 text-center">
+                            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning mb-3">Изменить</a>
+                            <br />
+                            <a asp-action="Index" class="btn btn-primary">Вернуться к списку персонала</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h1>View</h1>
 
 <div>
     <h4>Owner</h4>
@@ -86,3 +147,4 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать</a> |
     <a asp-action="Index">Назад</a>
 </div>
+*@
