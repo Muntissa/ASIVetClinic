@@ -259,9 +259,8 @@ namespace VetClinic.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> ChooseDiagnoses(int receptionId)
+        public async Task<IActionResult> ChooseDiagnoses()
         {
-            TempData["ReceptionId"] = receptionId;
             return View(await _context.Diagnoses.ToListAsync());
         }
 
@@ -269,8 +268,7 @@ namespace VetClinic.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChooseDiagnoses(List<int> diagnosesIds)
         {
-            int receptionId = (int)TempData["ReceptionId"];
-            Reception? reception = await _context.Receptions.FindAsync(receptionId);
+            Reception? reception = TempData.Get<Reception>("Reception");
 
             if (reception == null)
                 return NotFound();
@@ -307,7 +305,7 @@ namespace VetClinic.Web.Controllers
 
         public async Task<IActionResult> ChooseServices()
         {
-            return View(await _context.Drugs.ToListAsync());
+            return View(await _context.Services.ToListAsync());
         }
 
         [HttpPost]
@@ -329,25 +327,21 @@ namespace VetClinic.Web.Controllers
 
         public IActionResult ChooseTreatmentState()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseTreatmentState(Reception.State state)
+        {
             Reception? reception = TempData.Get<Reception>("Reception");
 
             if (reception == null)
                 return NotFound();
 
-            return View(reception);
-        }
+            reception.TreatmentState = state;
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChooseTreatmentState([Bind("TreatmentState")] Reception reception)
-        {
-            if (reception == null)
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return View(reception);
-
-            if (reception.TreatmentState == Reception.State.InHospital)
+            if (state == Reception.State.InHospital)
             {
                 TempData.Put("Reception", reception);
                 return RedirectToAction(nameof(ChooseHospital));
