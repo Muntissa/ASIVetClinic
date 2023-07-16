@@ -85,9 +85,8 @@ namespace VetClinic.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DescribeProblem([Bind("Type, Description")] Reception reception)
+        public IActionResult DescribeProblem([Bind("Description")] Reception reception)
         {
-            TempData["Type"] = reception.Type;
             TempData["Description"] = reception.Description;
             return RedirectToAction(nameof(ChooseDoctor));
         }
@@ -122,7 +121,7 @@ namespace VetClinic.Web.Controllers
         {
             Reception reception = new Reception
             {
-                Type = TempData["Type"].ToString(),
+                TreatmentState = Reception.State.Waiting,
                 Description = TempData["Description"].ToString(),
                 OwnerId = (int)TempData["OwnerId"],
                 AnimalId = (int)TempData["AnimalId"],
@@ -234,9 +233,188 @@ namespace VetClinic.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        #region Discharge
+        public async Task<IActionResult> CheckTreatmentState(int receptionId)
+        {
+            Reception? reception = await _context.Receptions.FindAsync(receptionId);
+
+            if (reception == null)
+                return NotFound();
+
+            TempData.Put("Reception", reception);
+
+            switch (reception.TreatmentState)
+            {
+                case Reception.State.Waiting:
+                    return RedirectToAction(nameof(ChooseDiagnoses));
+
+                case Reception.State.InHospital:
+                    return RedirectToAction(nameof(DischargeFromHospital));
+
+                case Reception.State.TreatmentCompleted:
+                    return RedirectToAction(nameof(TreatmentCompleted));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ChooseDiagnoses(int receptionId)
+        {
+            TempData["ReceptionId"] = receptionId;
+            return View(await _context.Diagnoses.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseDiagnoses(List<int> diagnosesIds)
+        {
+            int receptionId = (int)TempData["ReceptionId"];
+            Reception? reception = await _context.Receptions.FindAsync(receptionId);
+
+            if (reception == null)
+                return NotFound();
+
+            reception.Diagnoses = await _context.Diagnoses
+                .Where(d => diagnosesIds.Contains(d.Id))
+                .ToListAsync();
+
+            TempData.Put("Reception", reception);
+            return RedirectToAction(nameof(ChooseDrugs));
+        }
+
+        public async Task<IActionResult> ChooseDrugs()
+        {
+            return View(await _context.Drugs.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseDrugs(List<int> drugIds)
+        {
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            if (reception == null)
+                return NotFound();
+
+            reception.Drugs = await _context.Drugs
+                .Where(d => drugIds.Contains(d.Id))
+                .ToListAsync();
+
+            TempData.Put("Reception", reception);
+            return RedirectToAction(nameof(ChooseServices));
+        }
+
+        public async Task<IActionResult> ChooseServices()
+        {
+            return View(await _context.Drugs.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseServices(List<int> serviceIds)
+        {
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            if (reception == null)
+                return NotFound();
+
+            reception.Services = await _context.Services
+                .Where(s => serviceIds.Contains(s.Id))
+                .ToListAsync();
+
+            TempData.Put("Reception", reception);
+            return RedirectToAction(nameof(ChooseTreatmentState));
+        }
+
+        public IActionResult ChooseTreatmentState()
+        {
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            if (reception == null)
+                return NotFound();
+
+            return View(reception);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseTreatmentState([Bind("TreatmentState")] Reception reception)
+        {
+            if (reception == null)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return View(reception);
+
+            if (reception.TreatmentState == Reception.State.InHospital)
+            {
+                TempData.Put("Reception", reception);
+                return RedirectToAction(nameof(ChooseHospital));
+            }
+
+            _context.Receptions.Update(reception);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ChooseHospital()
+        {
+            return View(await _context.Hospitals.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChooseHospital(int? hospitalId)
+        {
+            if (hospitalId == null)
+                return NotFound();
+
+            Hospital? hospital = await _context.Hospitals.FindAsync(hospitalId);
+
+            if (hospital == null)
+                return NotFound();
+
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            if (reception == null)
+                return NotFound();
+
+            AnimalHospitalInfo animalHospitalInfo = new AnimalHospitalInfo
+            { 
+                HospitalId = hospital.Id,
+                AnimalId = reception.AnimalId,
+                StartDate = DateTime.Today
+            };
+
+            _context.Receptions.Update(reception);
+            await _context.AnimalHospitalInfos.AddAsync(animalHospitalInfo);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task<IActionResult> DischargeFromHospital()
+        {
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            if (reception == null)
+                return NotFound();
+
+            reception.TreatmentState = Reception.State.TreatmentCompleted;
+            _context.Update(reception);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult TreatmentCompleted()
+        {
+            return View();
+        }
+        #endregion
+
         private bool ReceptionExists(int id)
         {
-          return (_context.Receptions?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Receptions?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -5,11 +5,17 @@ namespace VetClinic.Common.Entities
 {
     public class Reception
     {
+        public enum State
+        {
+            Waiting,
+            InHospital,
+            TreatmentCompleted
+        }
+
         public int Id { get; set; }
 
-        [MaxLength(50)]
-        [Display(Name = "Тип")]
-        public string Type { get; set; } = string.Empty;
+        [Display(Name = "Состояние")]
+        public State TreatmentState { get; set; }
 
         [MaxLength(50)]
         [Display(Name = "Описание")]
@@ -30,6 +36,7 @@ namespace VetClinic.Common.Entities
         [DataType(DataType.DateTime)]
         [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
+
 
         public List<Diagnosis> Diagnoses { get; set; } = new();
         public List<Service> Services { get; set; } = new();

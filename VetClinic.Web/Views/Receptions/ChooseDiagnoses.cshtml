@@ -1,0 +1,40 @@
+﻿@model IEnumerable<VetClinic.Common.Entities.Diagnosis>
+
+@{
+    ViewData["Title"] = "Диагнозы";
+}
+
+<h1>Выберите диагнозы</h1>
+
+<form asp-action="ChooseDiagnoses">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <input type="checkbox" name="diagnosesIds" value="@item.Id" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-group">
+        <input type="submit" value="Далее" class="btn btn-primary" />
+    </div>
+</form>
+
+
+
+
