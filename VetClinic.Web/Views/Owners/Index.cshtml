@@ -4,9 +4,55 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container-fluid mt-5">
+    <h1 class="text-center mb-4">Владельцы</h1>
+    <div class="row">
+        <div class="col-md-12 col-lg-6 mb-4 mb-lg-0">
+            <a asp-action="Create" class="btn btn-success">Зарегестрировать нового владельца</a>
+        </div>
+    </div>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Серийный номер</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Пол</th>
+                    <th scope="col">Дата рождения</th>
+                    <th scope="col">Документ</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.Surname</td>
+                        <td>@item.Name</td>
+                        <td>@item.Patronymic</td>
+                        <td>@(item.Sex ? "Мужской" : "Женский")</td>
+                        <td>@item.DateOfBirth</td>
+                        <td>@item.DocumentData</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Email</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-2">Изменить</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm me-2">Подробнее</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -80,4 +126,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@

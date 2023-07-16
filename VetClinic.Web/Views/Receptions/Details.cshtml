@@ -4,9 +4,69 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Подробная информация</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Подробная информация</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.TreatmentState):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.TreatmentState)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Description):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Description)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Date):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Date)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Price):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Price)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Лечащий врач:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Employee.Surname) @Html.DisplayFor(model => model.Employee.Name) @Html.DisplayFor(model => model.Employee.Patronymic)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Animal.Name):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Animal.Name)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Услуги:</div>
+                        <div class="col-sm-8">
+                            @foreach (var service in Model.Services)
+                            {
+                                @service.Name
+                                <br />
+                            }
+                        </div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Выписанные препараты:</div>
+                        <div class="col-sm-8">
+                            @foreach (var drug in Model.Drugs)
+                            {
+                                @drug.Name
+                                <br />
+                            }
+                        </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-sm-12 text-center">
+                            <a asp-action="Index" class="btn btn-primary">Вернуться к списку записей</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div>
+@*<div>
     <h4>Reception</h4>
     <hr />
     <dl class="row">
@@ -44,6 +104,5 @@
 </div>
 <div>
     <a asp-action="CheckTreatmentState" asp-route-receptionId="@Model.Id">Вынести вердикт</a> |
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> | 
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
