@@ -25,14 +25,13 @@ namespace VetClinic.Web.Controllers
             if (user != null)
             {
                 IList<string> roles = await _userManager.GetRolesAsync(user);
-
                 if (roles.Contains("Врач"))
                     return View(await _context.Receptions
                         .Where(r => r.EmployeeId == user.Id)
                         .ToListAsync());
             }
             
-            return View(await _context.Receptions.ToListAsync());
+            return View(await _context.Receptions.Include(r => r.Employee).ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -43,6 +42,10 @@ namespace VetClinic.Web.Controllers
             }
 
             var reception = await _context.Receptions
+                .Include(r => r.Employee)
+                .Include(r => r.Animal)
+                .Include(r => r.Drugs)
+                .Include(r => r.Services)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reception == null)
             {
@@ -347,6 +350,11 @@ namespace VetClinic.Web.Controllers
                 return RedirectToAction(nameof(ChooseHospital));
             }
 
+            if(state == Reception.State.TreatmentCompleted)
+            {
+                reception.Price = (decimal)1.2 * _context.Services.FirstOrDefault(s => s.Name == "Консультация").Price;
+            }
+
             _context.Receptions.Update(reception);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -381,6 +389,7 @@ namespace VetClinic.Web.Controllers
                 StartDate = DateTime.Today
             };
 
+
             _context.Receptions.Update(reception);
             await _context.AnimalHospitalInfos.AddAsync(animalHospitalInfo);
             await _context.SaveChangesAsync();
@@ -391,6 +400,7 @@ namespace VetClinic.Web.Controllers
         public async Task<IActionResult> DischargeFromHospital()
         {
             Reception? reception = TempData.Get<Reception>("Reception");
+
 
             if (reception == null)
                 return NotFound();
@@ -405,16 +415,23 @@ namespace VetClinic.Web.Controllers
             animalHospitalInfo.EndDate = DateTime.Today;
             reception.TreatmentState = Reception.State.TreatmentCompleted;
 
-            _context.Update(reception);
-            _context.Update(animalHospitalInfo);
+            TempData.Put("Reception", reception);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            /* await _context.SaveChangesAsync();*/
+            return RedirectToAction(nameof(TreatmentCompleted));
         }
 
-        public IActionResult TreatmentCompleted()
+        public async Task<IActionResult> TreatmentCompleted()
         {
-            return View();
+            Reception? reception = TempData.Get<Reception>("Reception");
+
+            reception.Price = (decimal)1.2 * (reception.Services.Sum(s => s.Price) + reception.Drugs.Sum(d => d.Price));
+            
+            _context.Update(reception);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
         #endregion
 

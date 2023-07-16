@@ -40,15 +40,28 @@ namespace VetClinic.Web.Controllers
 
         public async Task<IActionResult> Index(string? role = null)
         {
-            if (role != null)
+            if (role != null )
+            {
+                ViewBag.Role = role;
+
                 return View(await _userManager.GetUsersInRoleAsync(role));
+            }
+                
 
             var admins = await _userManager.GetUsersInRoleAsync("admin");
 
-            return View(await _userManager
-                .Users
-                .Where(u => !admins.Contains(u))
-                .ToListAsync());
+            IList<Employee> users = await _userManager
+                            .Users
+                            .Where(u => !admins.Contains(u))
+                            .ToListAsync();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                user.Email = roles.Count > 0 ? roles[0] : "[Роль не присвоена]";
+            }
+
+            return View(users);
         }
 
         public async Task<IActionResult> HeadDoctorDetails()

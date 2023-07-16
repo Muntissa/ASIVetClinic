@@ -21,7 +21,6 @@
                             <th scope="col">@Html.DisplayNameFor(model => model.Color)</th>
                             <th scope="col">@Html.DisplayNameFor(model => model.Weight)</th>
                             <th scope="col">@Html.DisplayNameFor(model => model.DateOfBirth)</th>
-                            <th scope="col">@Html.DisplayNameFor(model => model.Status)</th>
                             <th scope="col">@Html.DisplayNameFor(model => model.PhotoPath)</th>
                             <th scope="col"></th>
                         </tr>
@@ -47,9 +46,6 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
                                 </td>
                                 <td>
                                     <img class="img-thumbnail" src="@item.PhotoPath" alt="фото питомца" style="max-width: 100px; height: auto;">

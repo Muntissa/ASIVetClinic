@@ -4,7 +4,48 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Подробная информация</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.InventoryNumber):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.InventoryNumber)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Type):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Type)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Lenght):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Lenght)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Width):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Width)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Height):</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Height)</div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-sm-12 text-center">
+                            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning mb-3">Изменить</a>
+                            <br />
+                            <a asp-action="Index" class="btn btn-primary">Вернуться к списку госпиталей</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h1>Details</h1>
 
 <div>
     <h4>Hospital</h4>
@@ -45,4 +86,4 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@

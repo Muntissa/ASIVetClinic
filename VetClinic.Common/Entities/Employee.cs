@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VetClinic.Common.Entities
 {
@@ -41,5 +42,8 @@ namespace VetClinic.Common.Entities
 
         [Display(Name = "Номер телефона")]
         public override string? PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
+
+        [NotMapped]
+        public string? Role { get; set; }
     }
 }
