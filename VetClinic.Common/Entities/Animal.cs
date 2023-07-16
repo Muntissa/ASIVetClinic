@@ -30,10 +30,11 @@ namespace VetClinic.Common.Entities
         [Display(Name = "Дата рождения (примерная)")]
         public DateTime DateOfBirth { get; set; }
 
+        [Display(Name = "Фото питомца")]
         public string? PhotoPath { get; set; }
 
-        /*public int? OwnerId { get; set; }
-        public Owner? Owner { get; set; }*/
+        [Display(Name = "Статус животного")]
+        public string? Status { get; set; }
 
         public List<Owner> Owners { get; set; } = new();
         public List<AnimalHospitalInfo> AnimalHospitalInfos { get; set; } = new();

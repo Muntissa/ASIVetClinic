@@ -13,10 +13,12 @@ namespace VetClinic.Web.Controllers
     public class AnimalsController : Controller
     {
         private readonly VetClinicContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public AnimalsController(VetClinicContext context)
+        public AnimalsController(VetClinicContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IActionResult> Index(int? ownerId)
@@ -54,10 +56,25 @@ namespace VetClinic.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath")] Animal animal)
+        public async Task<IActionResult> Create([Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath")] Animal animal, IFormFile upload)
         {
             if (ModelState.IsValid)
             {
+                var fileName = "";
+                var filePath = "";
+
+                if (upload != null && upload.Length > 0)
+                {
+                    fileName = Path.GetFileName(upload.FileName);
+                    filePath = Path.Combine(_appEnvironment.WebRootPath, "files", fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await upload.CopyToAsync(fileStream);
+                    }
+                    animal.PhotoPath = "/files/" + fileName;
+                }
+
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,10 +98,26 @@ namespace VetClinic.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath,OwnerId")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sex,Breed,Color,Weight,DateOfBirth,PhotoPath")] Animal animal, IFormFile upload)
         {
             if (id != animal.Id)
                 return NotFound();
+
+
+            var fileName = "";
+            var filePath = "";
+
+            if (upload != null && upload.Length > 0)
+            {
+                fileName = Path.GetFileName(upload.FileName);
+                filePath = Path.Combine(_appEnvironment.WebRootPath, "files", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await upload.CopyToAsync(fileStream);
+                }
+                animal.PhotoPath = "/files/" + fileName;
+            }
 
             if (ModelState.IsValid)
             {
@@ -113,7 +146,6 @@ namespace VetClinic.Web.Controllers
                 return NotFound();
 
             var animal = await _context.Animals
-                //.Include(a => a.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (animal == null)

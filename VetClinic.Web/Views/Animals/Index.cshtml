@@ -4,12 +4,68 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="container-fluid mt-5">
+    <h1 class="text-center mb-4">Питомцы</h1>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-4 text-center">
+            <a asp-action="Create" class="btn btn-success">Зарегестрировать новое животное</a>
+        </div>
+        </div>
+            <div class="table-responsive mt-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Sex)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Breed)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Color)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Weight)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.Status)</th>
+                            <th scope="col">@Html.DisplayNameFor(model => model.PhotoPath)</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @(item.Sex ? "Мужской" : "Женский")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Breed)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Color)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Weight)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    <img class="img-thumbnail" src="@item.PhotoPath" alt="фото питомца" style="max-width: 100px; height: auto;">
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-2">Изменить</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary btn-sm me-2">Подробнее</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -33,10 +89,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.PhotoPath)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>*@
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +98,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sex)
+                @(item.Sex ? "Мужской" : "Женский")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Breed)
@@ -58,14 +110,11 @@
                 @Html.DisplayFor(modelItem => item.Weight)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
+                @Html.DisplayName("Фото питомца")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PhotoPath)
+                <img class="img-thumbnail" src="@item.PhotoPath" alt="фото питомца" style="max-width: 100px; height: auto;">
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Owner.DocumentData)
-            </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
@@ -74,4 +123,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@

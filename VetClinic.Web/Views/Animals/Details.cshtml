@@ -3,64 +3,67 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Animal</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sex)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sex)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Breed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Breed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Weight)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Weight)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoPath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhotoPath)
-        </dd>
-        @*<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner.DocumentData)
-        </dd>*@
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Детальная информация</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Кличка:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Name)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Фото питомца:</div>
+                        <div class="col-sm-5 text-center">
+                            <img class="img-fluid rounded" src="@Model.PhotoPath" alt="Фото питомца" style="max-width: 300px;">
+                        </div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Пол:</div>
+                        <div class="col-sm-8">@(Model.Sex ? "Мужской" : "Женский")</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Порода:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Breed)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Цвет:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Color)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Вес:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Weight)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Дата рождения:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.DateOfBirth)</div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Владельцы:</div>
+                        <div class="col-sm-8">
+                            @foreach (var owner in Model.Owners)
+                            {
+                                @owner.Name @owner.Surname @owner.Patronymic
+                                <br />
+                            }
+                        </div>
+                    </div>
+                    <div class="row mb-4 border-bottom">
+                        <div class="col-sm-4 fw-bold">Статус:</div>
+                        <div class="col-sm-8">@Html.DisplayFor(model => model.Status)</div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-sm-12 text-center">
+                            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning mb-3">Изменить</a>
+                            <br />
+                            <a asp-action="Index" class="btn btn-primary">Вернуться к списку питомцев</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
