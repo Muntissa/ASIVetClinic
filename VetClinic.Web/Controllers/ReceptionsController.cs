@@ -253,7 +253,7 @@ namespace VetClinic.Web.Controllers
                     return RedirectToAction(nameof(DischargeFromHospital));
 
                 case Reception.State.TreatmentCompleted:
-                    return RedirectToAction(nameof(TreatmentCompleted));
+                    return RedirectToAction(nameof(Details), new { id = receptionId });
             }
 
             return RedirectToAction(nameof(Index));
@@ -395,8 +395,19 @@ namespace VetClinic.Web.Controllers
             if (reception == null)
                 return NotFound();
 
+            AnimalHospitalInfo? animalHospitalInfo = await _context
+                .AnimalHospitalInfos
+                .FirstOrDefaultAsync(ah => ah.AnimalId == reception.Id && ah.EndDate == null);
+
+            if (animalHospitalInfo == null)
+                return NotFound();
+
+            animalHospitalInfo.EndDate = DateTime.Today;
             reception.TreatmentState = Reception.State.TreatmentCompleted;
+
             _context.Update(reception);
+            _context.Update(animalHospitalInfo);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

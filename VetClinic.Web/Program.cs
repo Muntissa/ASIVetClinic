@@ -38,21 +38,6 @@ builder.Services
     .AddEntityFrameworkStores<VetClinicContext>()
     .AddSignInManager<SignInManager<Employee>>();
 
-/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = AuthOptions.ISSUER,
-            ValidateAudience = true,
-            ValidAudience = AuthOptions.AUDIENCE,
-            ValidateLifetime = true,
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true,
-        };
-    });*/
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -75,12 +60,3 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 app.Run();
-
-/*public class AuthOptions
-{
-    public const string ISSUER = "MyAuthServer"; // èçäàòåëü òîêåíà
-    public const string AUDIENCE = "MyAuthClient"; // ïîòðåáèòåëü òîêåíà
-    const string KEY = "mysupersecret_secretkey!123";   // êëþ÷ äëÿ øèôðàöèè
-    public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
-        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
-}*/
